@@ -16,13 +16,15 @@ public class ClickDestroy : MonoBehaviour
     private Quaternion originalRotation;
     private float respawnTimer;
     private GameObject player;
+    private Collider[] _collider;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 originalScale;
 
     private void Start()
     {
-       player = GameObject.FindGameObjectWithTag("Player");
+        _collider = GetComponents<Collider>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Awake()
@@ -61,10 +63,14 @@ public class ClickDestroy : MonoBehaviour
         BlinkWhite();
 
         // Drop the item
-        //Instantiate(itemToDrop, transform.position, Quaternion.identity);
+        Instantiate(itemToDrop, transform.position, Quaternion.identity);
 
         // Disable the object renderer
         spriteRenderer.enabled = false;
+        foreach (var collider in _collider)
+        {  
+            collider.enabled = false;
+        }
         player.GetComponentInChildren<PlayerInfo>().AddPoints(value);
             
         // Start the respawn timer
@@ -79,6 +85,10 @@ public class ClickDestroy : MonoBehaviour
 
         // Enable the object renderer and reset its properties
         spriteRenderer.enabled = true;
+        foreach (var collider in _collider)
+        {  
+            collider.enabled = true;
+        }
         ResetObject();
     }
 

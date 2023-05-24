@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -23,6 +22,9 @@ public class MenuManager : MonoBehaviour
     private void OnDestroy()
     {
         // Unsubscribe from the event when the MenuManager is destroyed
-        _player.GetComponentInChildren<PlayerInfo>().OnPointsChanged -= UpdateValueText;
+        if (_player != null)
+        {
+            _player.GetComponentInChildren<PlayerInfo>().OnPointsChanged -= UpdateValueText;
+        }
     }
 }

@@ -7,6 +7,8 @@ public class ObjectPickup : MonoBehaviour
     private Vector3 _initialMousePosition;
     private Vector3 _offset;
     private Camera _camera;
+    private float _distToCamera;
+    private bool _distanceCalculated;
 
     private void Start()
     {
@@ -24,6 +26,8 @@ public class ObjectPickup : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
+                    _distToCamera = Vector3.Distance(_camera.transform.position, transform.position);
+
                     _isHolding = true;
                     _rb.isKinematic = true;
                     _rb.velocity = Vector3.zero;
@@ -31,7 +35,7 @@ public class ObjectPickup : MonoBehaviour
                     _initialMousePosition = Input.mousePosition;
                     var transform1 = transform;
                     var position = transform1.position;
-                    _offset = position - _camera.ScreenToWorldPoint(new Vector3(_initialMousePosition.x, _initialMousePosition.y, _camera.WorldToScreenPoint(position).z));
+                    _offset = position - _camera.ScreenToWorldPoint(new Vector3(_initialMousePosition.x, _initialMousePosition.y, _distToCamera));
                 }
             }
         }
@@ -40,11 +44,12 @@ public class ObjectPickup : MonoBehaviour
         {
             _isHolding = false;
             _rb.isKinematic = false;
+            _distanceCalculated = false;
         }
 
         if (!_isHolding) return;
         
-        var mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _camera.WorldToScreenPoint(transform.position).z);
+        var mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _distToCamera);
         var objPosition = _camera.ScreenToWorldPoint(mousePosition) + _offset;
         _rb.MovePosition(objPosition);
     }

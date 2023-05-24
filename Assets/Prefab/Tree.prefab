@@ -128,6 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 3
-  itemToDrop: {fileID: 0}
+  itemToDrop: {fileID: 5197041737034170611, guid: 70607dc1b6e7edb47a1efbb4e7531c6a, type: 3}
   respawnTime: 30
   value: 5
