@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class ClickDestroy : MonoBehaviour
 {
     public int Health = 3;  // Number of clicks required to destroy the object
-    public GameObject itemToDrop;   // Item to drop when destroyed
+    public List<ItemSelector.ItemDrop> itemsToDrop;   // Item to drop when destroyed
     public float respawnTime = 30f;  // Time in seconds for the object to respawn
     public int value = 5;
 
@@ -17,12 +19,14 @@ public class ClickDestroy : MonoBehaviour
     private float respawnTimer;
     private GameObject player;
     private Collider[] _collider;
-
+    private ItemSelector itemSelector;
+    
     private SpriteRenderer spriteRenderer;
     private Vector3 originalScale;
 
     private void Start()
     {
+        itemSelector = gameObject.AddComponent<ItemSelector>();
         _collider = GetComponents<Collider>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
@@ -63,7 +67,9 @@ public class ClickDestroy : MonoBehaviour
         BlinkWhite();
 
         // Drop the item
-        Instantiate(itemToDrop, transform.position, Quaternion.identity);
+        var dropItem = ItemSelector.SelectGameObjectByRarity(itemsToDrop);
+        Instantiate(dropItem, transform.position, Quaternion.identity);
+
 
         // Disable the object renderer
         spriteRenderer.enabled = false;
@@ -146,4 +152,5 @@ public class ClickDestroy : MonoBehaviour
         isRespawning = false;
         ResetObject();
     }
+    
 }

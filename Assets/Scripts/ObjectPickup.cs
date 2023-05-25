@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ObjectPickup : MonoBehaviour
@@ -8,14 +9,13 @@ public class ObjectPickup : MonoBehaviour
     private Vector3 _offset;
     private Camera _camera;
     private float _distToCamera;
-    private bool _distanceCalculated;
 
     private void Start()
     {
         _camera = Camera.main;
         _rb = GetComponent<Rigidbody>();
     }
-
+ 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -42,9 +42,9 @@ public class ObjectPickup : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) && _isHolding)
         {
+            
             _isHolding = false;
             _rb.isKinematic = false;
-            _distanceCalculated = false;
         }
 
         if (!_isHolding) return;
