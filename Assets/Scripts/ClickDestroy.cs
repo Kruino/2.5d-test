@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
-
 public class ClickDestroy : MonoBehaviour
 {
-    public int Health = 3;  // Number of clicks required to destroy the object
-    public List<ItemSelector.ItemDrop> itemsToDrop;   // Item to drop when destroyed
-    public float respawnTime = 30f;  // Time in seconds for the object to respawn
+    public int Health = 3;
+    public List<ItemSelector.ItemDrop> itemsToDrop;
+    public float respawnTime = 30f;
     public int value = 5;
 
     private int DamageAmount = 0;
@@ -63,23 +59,19 @@ public class ClickDestroy : MonoBehaviour
 
     private System.Collections.IEnumerator DestroyObject()
     {
-        // Blink the object white for a few moments
         BlinkWhite();
-
-        // Drop the item
+        
         var dropItem = ItemSelector.SelectGameObjectByRarity(itemsToDrop);
         Instantiate(dropItem, transform.position, Quaternion.identity);
-
-
-        // Disable the object renderer
+        
         spriteRenderer.enabled = false;
         foreach (var collider in _collider)
         {  
             collider.enabled = false;
         }
+        
         player.GetComponentInChildren<PlayerInfo>().AddPoints(value);
-            
-        // Start the respawn timer
+        
         respawnTimer = 0f;
         isRespawning = true;
 
@@ -88,8 +80,7 @@ public class ClickDestroy : MonoBehaviour
             respawnTimer += Time.deltaTime;
             yield return null;
         }
-
-        // Enable the object renderer and reset its properties
+        
         spriteRenderer.enabled = true;
         foreach (var collider in _collider)
         {  
@@ -100,7 +91,6 @@ public class ClickDestroy : MonoBehaviour
 
     private System.Collections.IEnumerator BlinkWhite()
     {
-        // Blink the object white briefly
         spriteRenderer.color = Color.white;
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = Color.red;
@@ -110,7 +100,6 @@ public class ClickDestroy : MonoBehaviour
 
     private void BounceObject()
     {
-        // Bounce the object by scaling it up and down
         const float bounceScale = -0.2f;
         const float bounceTime = 0.1f;
 
